@@ -14,13 +14,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
+        String createUserTable = "CREATE TABLE IF NOT EXISTS user (" +
             "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL," +
             " name VARCHAR(20) NOT NULL," +
-            " lastName VARCHAR(20) NOT NULL," +
+            " last_name VARCHAR(20) NOT NULL," +
             " age TINYINT NOT NULL);";
         try (Statement statement = con.createStatement()) {
-            statement.executeUpdate(createUsersTable);
+            statement.executeUpdate(createUserTable);
             con.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,9 +33,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String dropUsersTable = "DROP TABLE IF EXISTS users";
+        String dropUserTable = "DROP TABLE IF EXISTS user";
         try (Statement statement = con.createStatement()) {
-            statement.executeUpdate(dropUsersTable);
+            statement.executeUpdate(dropUserTable);
             con.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        String saveUser = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
+        String saveUser = "INSERT INTO user (name, last_name, age) VALUES (?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(saveUser)) {
             ps.setString(1, name);
@@ -67,7 +67,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        String removeUserById = "DELETE FROM users WHERE id = ?";
+        String removeUserById = "DELETE FROM user WHERE id = ?";
         try (PreparedStatement ps = con.prepareStatement(removeUserById)) {
             ps.setLong(1, id);
             ps.executeUpdate();
@@ -84,13 +84,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String getAllUsers = "SELECT * FROM users";
+        String getAllUsers = "SELECT * FROM user";
         try (Statement statement = con.createStatement()) {
             ResultSet rs = statement.executeQuery(getAllUsers);
             con.commit();
 
             while (rs.next()) {
-                User user = new User(rs.getString("name"), rs.getString("lastName"), rs.getByte("age"));
+                User user = new User(rs.getString("name"), rs.getString("last_name"), rs.getByte("age"));
                 user.setId(rs.getLong("id"));
                 userList.add(user);
             }
@@ -106,7 +106,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String cleanUsersTable = "TRUNCATE TABLE users";
+        String cleanUsersTable = "TRUNCATE TABLE user";
         try (Statement statement = con.createStatement()) {
             statement.execute(cleanUsersTable);
             con.commit();

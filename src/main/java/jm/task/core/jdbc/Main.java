@@ -21,7 +21,7 @@ public class Main {
         us.removeUserById(1);
 
         for (User user : us.getAllUsers()) {
-            System.out.println(user.toString());
+            System.out.println(user);
         }
 
         us.cleanUsersTable();
